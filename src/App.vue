@@ -26,12 +26,59 @@
           v-show="showSearch"
         />
         <q-btn icon="search" flat @click="toggleSearch" class="text-black" />
-        <q-btn flat @click="login" class="text-black">
+        <q-btn flat @click="showLoginDialog" class="text-black">
           <q-icon name="login" class="text-black" />
           <span class="q-ml-sm">Login / Register</span>
         </q-btn>
       </q-toolbar>
     </q-header>
+
+    <!-- Enhanced Dialog for login with a more attractive design -->
+    <q-dialog v-model="loginDialog" full-width full-height>
+      <q-card
+        class="bg-orange-7 text-black"
+        style="backdrop-filter: blur(15px); border-radius: 20px"
+      >
+        <q-card-section class="row items-center q-pb-none">
+          <q-space></q-space>
+          <q-btn icon="close" flat round @click="loginDialog = false" />
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="text-h5 text-center">Welcome Back!</div>
+          <div class="text-subtitle2 text-center q-mb-md">
+            Login to continue
+          </div>
+          <q-input filled v-model="username" label="Username" class="q-ma-md" />
+          <q-input
+            filled
+            v-model="password"
+            label="Password"
+            type="password"
+            class="q-ma-md"
+          />
+          <div class="text-center q-mt-md">
+            <q-btn
+              label="Login"
+              color="orange"
+              class="full-width"
+              @click="login"
+            />
+            <div class="q-mt-md row justify-center q-gutter-sm">
+              <q-btn
+                icon="img:icons/google.svg"
+                flat
+                @click="loginWithGoogle"
+              />
+              <q-btn
+                icon="img:icons/facebook.svg"
+                flat
+                @click="loginWithFacebook"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 
     <!-- Navbar tambahan di bawah header, turun lebih jauh -->
     <q-toolbar
@@ -71,6 +118,21 @@
       </q-toolbar>
     </q-toolbar>
 
+    <!-- Tampilkan satu gambar besar -->
+    <div
+      class="shadow-2 rounded-borders"
+      style="
+        height: 500px;
+        margin-top: 20px;
+        border-radius: 15px;
+        overflow: hidden;
+        background-image: url('https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/3zt2-1fb4-original.jpeg');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      "
+    ></div>
+
     <!-- Produk yang dapat diklik dengan efek blur pada teks -->
     <div class="product-container">
       <div
@@ -106,7 +168,16 @@ export default {
     return {
       showSearch: false,
       search: "",
+      slide: 1,
+      carouselImages: [
+        "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/3zt2-1fb4-original.jpeg",
+        "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/IMG_4537-c53b-original.png",
+        "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/3zt12%20(2)%20(1)-d5a2-original.png",
+        "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/3zt39-d6fe-original.jpeg",
+        "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/3zt5-db79-original.jpeg",
+      ],
       products: [
+        // Data produk tetap dipertahankan
         {
           id: 1,
           name: "Produk 1",
@@ -214,14 +285,29 @@ export default {
             "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/3ztstore/NEW36-91102-original.jpg",
         },
       ],
+      loginDialog: false,
+      username: "",
+      password: "",
     };
   },
   methods: {
     toggleSearch() {
       this.showSearch = !this.showSearch;
     },
+    showLoginDialog() {
+      this.loginDialog = true;
+    },
     login() {
       // Implement login logic or redirect to login page
+      console.log("Login attempt with username:", this.username);
+    },
+    loginWithGoogle() {
+      // Redirect to Google login
+      console.log("Redirecting to Google login");
+    },
+    loginWithFacebook() {
+      // Redirect to Facebook login
+      console.log("Redirecting to Facebook login");
     },
     addToCart(item) {
       // Implement add to cart logic
@@ -232,6 +318,10 @@ export default {
 </script>
 
 <style>
+.bg-blur {
+  backdrop-filter: blur(10px);
+}
+
 .custom-btn {
   font-size: 12px;
   color: black;
@@ -245,8 +335,9 @@ export default {
 }
 .product {
   cursor: pointer;
-  width: 200px;
-  height: 300px;
+  width: 100%; /* Mengubah lebar menjadi 100% untuk responsifitas */
+  max-width: 200px; /* Menetapkan lebar maksimum */
+  height: auto; /* Mengatur tinggi menjadi otomatis */
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -275,6 +366,6 @@ export default {
   color: white;
   font-size: 16px;
   text-align: center;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur 5px;
 }
 </style>
